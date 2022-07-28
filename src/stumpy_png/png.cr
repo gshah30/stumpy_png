@@ -29,7 +29,7 @@ module StumpyPNG
     getter palette = [] of RGBA
     getter? parsed = false
     getter data = Bytes.new(0)
-    getter canvas = Canvas.new(0, 0)
+    getter canvas = Canvas(RGBA).new(0, 0)
 
     def initialize
       @idat_buffer = IO::Memory.new
@@ -94,7 +94,7 @@ module StumpyPNG
     end
 
     def to_canvas_none
-      canvas = Canvas.new(@width, @height)
+      canvas = Canvas(RGBA).new(@width, @height)
 
       bpp = (@bit_depth.clamp(8..) / 8 * COLOR_TYPES[@color_type][2]).to_i32
       scanline_width = (@bit_depth.to_f / 8 * COLOR_TYPES[@color_type][2] * @width).ceil.to_i32
@@ -140,7 +140,7 @@ module StumpyPNG
       col = 0
       data_pos = 0
 
-      canvas = Canvas.new(@width, @height)
+      canvas = Canvas(RGBA).new(@width, @height)
       bpp = (@bit_depth.clamp(8..) / 8 * COLOR_TYPES[@color_type][2]).to_i32
 
       while pass < 7
@@ -172,7 +172,7 @@ module StumpyPNG
           col = starting_col[pass]
 
           line_width = scanline_width_.to_i32
-          line_canvas = Canvas.new(line_width, 1)
+          line_canvas = Canvas(RGBA).new(line_width, 1)
 
           case color_type
           when 0 then Scanline.decode_grayscale(decoded, line_canvas, 0, bit_depth)
